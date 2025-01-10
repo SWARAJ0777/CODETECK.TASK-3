@@ -38,3 +38,4 @@ Pandas: Used for data manipulation and analysis, specifically for reading CSV fi
 FPDF: A Python library for generating PDF files. It is used here to format and output the analyzed data in a clean, readable PDF document.
 3. Data Format:
 CSV (Comma-Separated Values): The input file format containing the dataset for analysis.
+OUTPUT:[TASK 3 OUTPUT.pdf](https://github.com/user-attachments/files/18379521/TASK.3.OUTPUT.pdf)
