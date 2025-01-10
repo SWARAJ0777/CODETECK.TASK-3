@@ -1,0 +1,59 @@
+/*I create a Python script that reads data from a file, analyzes it, and generates a formatted PDF report using libraries like FPDF or ReportLab*/
+import pandas as pd
+from fpdf import FPDF
+
+# Step 1: Load and validate the data
+try:
+    df = pd.read_csv('data.csv')
+except FileNotFoundError:
+    raise Exception("The file 'data.csv' was not found. Please check the file path.")
+
+# Step 2: Perform basic analysis (summary statistics)
+if df.empty:
+    raise ValueError("The data file is empty.")
+else:
+    stats_summary = df.describe()
+
+# Step 3: Customize PDF Report generation using FPDF
+class ReportPDF(FPDF):
+    
+    def add_report_header(self, title):
+        """ Adds the header for the PDF report """
+        self.set_font('Arial', 'B', 14)
+        self.cell(0, 10, title, ln=True, align='C')
+        self.ln(10)
+    
+    def add_footer(self):
+        """ Adds a page footer with page numbers """
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
+    
+    def add_section_title(self, section_title):
+        """ Adds a section title """
+        self.set_font('Arial', 'B', 12)
+        self.cell(0, 10, section_title, ln=True)
+        self.ln(5)
+    
+    def add_section_body(self, text_body):
+        """ Adds the body text to the section """
+        self.set_font('Arial', '', 12)
+        self.multi_cell(0, 10, text_body)
+        self.ln()
+
+# Step 4: Initialize and build the PDF
+report = ReportPDF()
+report.add_page()
+
+# Adding header and content to the PDF
+report.add_report_header('Automated Data Analysis Report')
+report.add_section_title('Data Overview and Summary')
+
+# Convert summary to string and add to PDF
+report.add_section_body(stats_summary.to_string())
+
+# Step 5: Output the final PDF file
+output_file = 'analysis_report.pdf'
+report.output(output_file)
+
+print(f"PDF report '{output_file}' has been created successfully.")
